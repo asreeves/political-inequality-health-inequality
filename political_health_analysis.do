@@ -1,9 +1,16 @@
 ***** Political inequalities and health inequalities
 
-import excel "/Users/reevesa/Dropbox/Political determinants of health/Data/health inequalities and turnout.xlsx", sheet("Sheet1") firstrow
+**** Aaron Reeves and Johan P. Mackenbach
 
-import excel "C:/Users/areeves/Dropbox/Political determinants of health/Data/health inequalities and turnout.xlsx", sheet("Sheet1") firstrow
+**** Analysis file
 
+
+/*
+For any further questions email: aaron.reeves@spi.ox.ac.uk
+
+*/
+
+*** Open data file
 
 gen pop1000 = pop/1000
 gen gdp100 = gdp/100
@@ -31,10 +38,6 @@ eststo: reg smr_rel_ineq_male_ed voted_ed_diff pov_lineq_ed [pw=pop1000]
 eststo: reg smr_rel_ineq_male_ed voted_ed_diff smoke_diff_m [pw=pop1000]
 eststo: reg smr_rel_ineq_male_ed voted_ed_diff gdp100 gini  soc_proc post_comm health_exp_GDPpc pov_lineq_ed smoke_diff_m [pw=pop1000]
 esttab
-esttab using "/users/reevesa/Dropbox/Political determinants of health/Tables/Table1.rtf", se(a2) r2(a2) l nodep replace ///
-	b(a2) star(* 0.05 ** 0.01) onecell
-esttab using "/users/reevesa/Dropbox/Political determinants of health/Final/Table1.tex", se(a2) r2(a2) l nodep replace ///
-	b(a2) star(* 0.05 ** 0.01) 	
 eststo clear 
 
 
@@ -51,10 +54,6 @@ eststo: reg smr_rel_ineq_female_ed voted_ed_diff pov_lineq_ed [pw=pop1000]
 eststo: reg smr_rel_ineq_female_ed voted_ed_diff smoke_diff_f [pw=pop1000]
 eststo: reg smr_rel_ineq_female_ed voted_ed_diff gdp100 gini  soc_proc post_comm health_exp_GDPpc pov_lineq_ed smoke_diff_f [pw=pop1000]
 esttab
-esttab using "/users/reevesa/Dropbox/Political determinants of health/Tables/Table2.rtf", se(a2) r2(a2) l nodep replace ///
-	b(a2) star(* 0.05 ** 0.01) onecell
-esttab using "/users/reevesa/Dropbox/Political determinants of health/Final/Table2.tex", se(a2) r2(a2) l nodep replace ///
-	b(a2) star(* 0.05 ** 0.01) 	
 eststo clear 
 
 
@@ -67,9 +66,6 @@ eststo: reg can_rel_ineq_male_ed voted_ed_diff gdp100 gini  soc_proc post_comm h
 eststo: reg cvd_rel_ineq_male_ed voted_ed_diff gdp100 gini soc_proc post_comm health_exp_GDPpc  pov_lineq_ed smoke_diff_m [pw=pop1000]
 eststo: reg oth_rel_ineq_male_ed voted_ed_diff gdp100 gini soc_proc post_comm health_exp_GDPpc  pov_lineq_ed smoke_diff_m [pw=pop1000]
 eststo: reg amen_rel_ineq_male_ed voted_ed_diff gdp100 gini soc_proc post_comm health_exp_GDPpc  pov_lineq_ed smoke_diff_m [pw=pop1000]
-esttab
-esttab using "/users/reevesa/Dropbox/Political determinants of health/Tables/Table3.rtf", se(a2) r2(a2) l nodep replace ///
-	b(a2) star(* 0.05 ** 0.01) onecell
 eststo clear 
 
 
@@ -81,21 +77,16 @@ eststo: reg can_rel_ineq_female_ed voted_ed_diff gdp100 gini soc_proc post_comm 
 eststo: reg cvd_rel_ineq_female_ed voted_ed_diff gdp100 gini soc_proc post_comm health_exp_GDPpc  pov_lineq_ed smoke_diff_f [pw=pop1000]
 eststo: reg oth_rel_ineq_female_ed voted_ed_diff gdp100 gini soc_proc post_comm health_exp_GDPpc  pov_lineq_ed smoke_diff_f [pw=pop1000]
 eststo: reg amen_rel_ineq_female_ed voted_ed_diff gdp100 gini soc_proc post_comm health_exp_GDPpc  pov_lineq_ed smoke_diff_f [pw=pop1000]
-esttab
-esttab using "/users/reevesa/Dropbox/Political determinants of health/Tables/Table4.rtf", se(a2) r2(a2) l nodep replace ///
-	b(a2) star(* 0.05 ** 0.01) onecell
 eststo clear 
 
 
-// perhaps update the amenable to external and drop the smoking-related. 
-
 ** Sensitivity analysis
 foreach num of numlist 1 2 3 4 5 6 7 8 9 11 13 15 16 18 19 20 21 {
-	qui reg smr_rel_ineq_male_ed voted_ed_diff if idn!=`num' 
+	qui reg smr_rel_ineq_male_ed voted_ed_diff if idn!=`num' [pw=pop1000]
 	eststo M`num'
 	}
 
-qui reg smr_rel_ineq_male_ed voted_ed_diff 
+qui reg smr_rel_ineq_male_ed voted_ed_diff [pw=pop1000]
 eststo M0
 	
 coefplot M0 || M1 || M2 || M3 || M4 || M5 || M6 || M7 || M8 || M9 || M11 || ///
@@ -109,11 +100,11 @@ coefplot M0 || M1 || M2 || M3 || M4 || M5 || M6 || M7 || M8 || M9 || M11 || ///
 	
 	
 foreach num of numlist 1 2 3 4 5 6 7 8 9 11 13 15 16 18 19 20 21 {
-	qui reg smr_rel_ineq_female_ed voted_ed_diff if idn!=`num' 
+	qui reg smr_rel_ineq_female_ed voted_ed_diff if idn!=`num' [pw=pop1000]
 	eststo M`num'
 	}
 
-qui reg smr_rel_ineq_female_ed voted_ed_diff 
+qui reg smr_rel_ineq_female_ed voted_ed_diff [pw=pop1000]
 eststo M0
 	
 coefplot M0 || M1 || M2 || M3 || M4 || M5 || M6 || M7 || M8 || M9 || M11 || ///
@@ -129,6 +120,6 @@ coefplot M0 || M1 || M2 || M3 || M4 || M5 || M6 || M7 || M8 || M9 || M11 || ///
 ** mrobust
 
 mrobust reg smr_rel_ineq_male_ed voted_ed_diff gdp100 gini soc_proc post_comm health_exp_GDPpc  pov_lineq_ed  smoke_diff_m 
-mrobust reg smr_rel_ineq_female_ed voted_ed_diff gdp100 gini  soc_proc post_comm health_exp_GDPpc pov_lineq_ed smoke_diff_f
+mrobust reg smr_rel_ineq_female_ed voted_ed_diff gdp100 gini  soc_proc post_comm health_exp_GDPpc pov_lineq_ed smoke_diff_f 
 
 	

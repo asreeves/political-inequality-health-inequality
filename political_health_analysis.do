@@ -80,13 +80,13 @@ eststo: reg amen_rel_ineq_female_ed voted_ed_diff gdp100 gini soc_proc post_comm
 eststo clear 
 
 
-** Sensitivity analysis
+** Sensitivity analysis - replicating raw correlation coefficients for different sets of countries. 
 foreach num of numlist 1 2 3 4 5 6 7 8 9 11 13 15 16 18 19 20 21 {
-	qui reg smr_rel_ineq_male_ed voted_ed_diff if idn!=`num' [pw=pop1000]
+	qui reg smr_rel_ineq_male_ed voted_ed_diff if idn!=`num'
 	eststo M`num'
 	}
 
-qui reg smr_rel_ineq_male_ed voted_ed_diff [pw=pop1000]
+qui reg smr_rel_ineq_male_ed voted_ed_diff 
 eststo M0
 	
 coefplot M0 || M1 || M2 || M3 || M4 || M5 || M6 || M7 || M8 || M9 || M11 || ///
@@ -100,11 +100,11 @@ coefplot M0 || M1 || M2 || M3 || M4 || M5 || M6 || M7 || M8 || M9 || M11 || ///
 	
 	
 foreach num of numlist 1 2 3 4 5 6 7 8 9 11 13 15 16 18 19 20 21 {
-	qui reg smr_rel_ineq_female_ed voted_ed_diff if idn!=`num' [pw=pop1000]
+	qui reg smr_rel_ineq_female_ed voted_ed_diff if idn!=`num' 
 	eststo M`num'
 	}
 
-qui reg smr_rel_ineq_female_ed voted_ed_diff [pw=pop1000]
+qui reg smr_rel_ineq_female_ed voted_ed_diff 
 eststo M0
 	
 coefplot M0 || M1 || M2 || M3 || M4 || M5 || M6 || M7 || M8 || M9 || M11 || ///
